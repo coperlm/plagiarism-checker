@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>查重结果 - 文本查重系统</title>
+    <title>查重结果 - 喂葡查重网址</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <style>
@@ -26,12 +26,19 @@
             position: relative;
             top: -25px;
         }
+        .report-container {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
     </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
-            <a class="navbar-brand" href="/">文本查重系统</a>
+            <a class="navbar-brand" href="/">喂葡查重网址</a>
         </div>
     </nav>
 
@@ -42,12 +49,10 @@
                     <div class="card-header bg-primary text-white">
                         <h4>查重结果</h4>
                     </div>
-                    <div class="card-body">
-                        <div class="summary">
-                            <h5>比较文件</h5>
+                    <div class="card-body">                        <div class="summary">
+                            <h5>查重信息</h5>
                             <div class="d-flex justify-content-between">
-                                <div>文件 1: <strong>{{ result.file1 }}</strong></div>
-                                <div>文件 2: <strong>{{ result.file2 }}</strong></div>
+                                <div>上传文件: <strong>{{ result.file }}</strong></div>
                             </div>
 
                             <h5 class="mt-4">总体相似度: <span class="badge bg-{{ 'danger' if result.overall_similarity > 0.7 else 'warning' if result.overall_similarity > 0.4 else 'success' }}">{{ "%.2f"|format(result.overall_similarity*100) }}%</span></h5>
@@ -74,13 +79,12 @@
                                     </h2>
                                     <div id="collapse{{ loop.index }}" class="accordion-collapse collapse" aria-labelledby="heading{{ loop.index }}" data-bs-parent="#similarSections">
                                         <div class="accordion-body">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <h6>文件 1 (段落 {{ section.index1+1 }}):</h6>
+                                            <div class="row">                                                <div class="col-md-6">
+                                                    <h6>上传文件 (段落 {{ section.index1+1 }}):</h6>
                                                     <div class="highlight">{{ section.text1 }}</div>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <h6>文件 2 (段落 {{ section.index2+1 }}):</h6>
+                                                    <h6>比对文件: {{ section.compared_file }} (段落 {{ section.index2+1 }}):</h6>
                                                     <div class="highlight">{{ section.text2 }}</div>
                                                 </div>
                                             </div>
@@ -94,8 +98,15 @@
                         <div class="mt-4 alert alert-success">
                             没有发现明显相似的段落
                         </div>
-                        {% endif %}
-
+                        {% endif %}                        <div class="report-container mt-4">
+                            <h5>查重报告</h5>
+                            <p>文件名: {{ result.file }}</p>
+                            <p>查重时间: {{ result.timestamp }}</p>
+                            <p>总体相似度: {{ "%.2f"|format(result.overall_similarity*100) }}%</p>
+                            <p>相似段落数量: {{ result.similar_sections|length }}</p>
+                            <a href="/download-report/{{ result.report_id }}" class="btn btn-success">下载查重报告</a>
+                        </div>
+                        
                         <div class="mt-4">
                             <a href="/" class="btn btn-primary">再次查重</a>
                         </div>
@@ -103,11 +114,9 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <footer class="bg-dark text-white text-center py-3 mt-5">
+    </div>    <footer class="bg-dark text-white text-center py-3 mt-5">
         <div class="container">
-            <p class="mb-0">文本查重系统 &copy; 2025</p>
+            <p class="mb-0">喂葡查重网址 &copy; 2025</p>
         </div>
     </footer>
 
